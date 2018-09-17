@@ -54,3 +54,7 @@ VALUES (3, now(), 'License_GHI', 6, FALSE, 3.5, 'GAS', 'Suzuki', FALSE, 'black')
 
 INSERT INTO car (id, date_created, license_plate, seat_count, convertible, rating, engine_type, manufacturer, deleted, color)
 VALUES (4, now(), 'License_JKL', 2, FALSE, 4.0, 'ELECTRIC', 'Tesla', FALSE, 'grey');
+
+---- assign cars to driver
+INSERT INTO driver_car (id, date_created, date_updated, driver_id, car_id)
+VALUES (1, now(), now(), 8,1);
