@@ -82,4 +82,9 @@ public class DriverController {
         driverCarService.deselectCar(driverId, carId);
     }
 
+    @GetMapping("/search")
+    public List<DriverDTO> searchDrivers(@RequestParam("q") String query) {
+        return DriverMapper.makeDriverDTOList(driverService.search(query));
+    }
+
 }

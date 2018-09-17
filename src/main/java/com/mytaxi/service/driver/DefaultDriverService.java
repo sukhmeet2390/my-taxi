@@ -1,24 +1,30 @@
 package com.mytaxi.service.driver;
 
 import com.mytaxi.dataaccessobject.DriverRepository;
+import com.mytaxi.dataaccessobject.DriverSpecificationBuilder;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Service to encapsulate the link between DAO and controller and to have business logic for some driver specific things.
  * <p/>
  */
 @Service
+@Slf4j
 public class DefaultDriverService implements DriverService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDriverService.class);
@@ -102,6 +108,19 @@ public class DefaultDriverService implements DriverService {
     @Override
     public List<DriverDO> find(OnlineStatus onlineStatus) {
         return driverRepository.findByOnlineStatus(onlineStatus);
+    }
+
+    @Override
+    public List<DriverDO> search(String query) {
+        DriverSpecificationBuilder builder = new DriverSpecificationBuilder();
+        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+        Matcher matcher = pattern.matcher(query + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+        }
+        final Specification<DriverDO> specification = builder.build();
+        log.info("Spec" + specification);
+        return driverRepository.findAll(specification);
     }
 
 

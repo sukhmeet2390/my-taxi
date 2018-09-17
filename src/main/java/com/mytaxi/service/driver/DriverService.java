@@ -1,5 +1,6 @@
 package com.mytaxi.service.driver;
 
+import com.mytaxi.datatransferobject.DriverDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
@@ -19,4 +20,5 @@ public interface DriverService {
 
     List<DriverDO> find(OnlineStatus onlineStatus);
 
+    List<DriverDO> search(String query);
 }
