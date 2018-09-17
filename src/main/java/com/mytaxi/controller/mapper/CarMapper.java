@@ -2,6 +2,7 @@ package com.mytaxi.controller.mapper;
 
 import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainobject.CarDO;
+import com.mytaxi.domainvalue.EngineType;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,5 +29,17 @@ public class CarMapper {
                 .model(carDO.getModel())
                 .build();
 
+    }
+
+    public static CarDO makeCarDO(CarDTO car) {
+        return new CarDO(car.getLicensePlate(),
+                car.getSeatCount(),
+                car.getRating(),
+                EngineType.valueOf(car.getEngine()),
+                car.getManufacturer(),
+                false,
+                car.getConvertible(),
+                car.getColor(),
+                car.getModel());
     }
 }
