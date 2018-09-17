@@ -1,12 +1,15 @@
 package com.mytaxi.controller;
 
+import com.mytaxi.controller.mapper.DriverCarMapper;
 import com.mytaxi.controller.mapper.DriverMapper;
+import com.mytaxi.datatransferobject.DriverCarDTO;
 import com.mytaxi.datatransferobject.DriverDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.service.driver.DriverService;
+import com.mytaxi.service.driver_car.DriverCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +26,13 @@ import java.util.List;
 public class DriverController {
 
     private final DriverService driverService;
+    private final DriverCarService driverCarService;
 
 
     @Autowired
-    public DriverController(final DriverService driverService) {
+    public DriverController(final DriverService driverService, final DriverCarService driverCarService) {
         this.driverService = driverService;
+        this.driverCarService = driverCarService;
     }
 
 
@@ -63,4 +68,17 @@ public class DriverController {
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus) {
         return DriverMapper.makeDriverDTOList(driverService.find(onlineStatus));
     }
+
+    @PutMapping("/{driverId}/select-car/{carId}")
+    public DriverCarDTO selectCarForDriver(@PathVariable(name = "driverId") Long driverId,
+                                           @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException {
+        return DriverCarMapper.makeDriverCarDTO(driverCarService.selectCar(driverId, carId));
+    }
+
+    @PutMapping("/{driverId}/deselect-car/{carId}")
+    public void deselectCarForDriver(@PathVariable(name = "driverId") Long driverId,
+                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException {
+        driverCarService.deselectCar(driverId, carId);
+    }
+
 }

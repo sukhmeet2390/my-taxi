@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  * <p/>
  */
 public interface DriverCarRepository extends CrudRepository<DriverCarDO, Long> {
+    DriverCarDO findByDriverIdAndCarId(Long driverId, Long carId);
 }
