@@ -6,6 +6,7 @@ import com.mytaxi.datatransferobject.DriverCarDTO;
 import com.mytaxi.datatransferobject.DriverDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
+import com.mytaxi.exception.CarAlreadyInUseException;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.service.driver.DriverService;
@@ -71,13 +72,13 @@ public class DriverController {
 
     @PutMapping("/{driverId}/select-car/{carId}")
     public DriverCarDTO selectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                           @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException {
+                                           @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
         return DriverCarMapper.makeDriverCarDTO(driverCarService.selectCar(driverId, carId));
     }
 
     @PutMapping("/{driverId}/deselect-car/{carId}")
     public void deselectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException {
+                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException {
         driverCarService.deselectCar(driverId, carId);
     }
 
