@@ -1,4 +1,4 @@
-package com.mytaxi.service.driver;
+package com.mytaxi.service.car;
 
 import com.mytaxi.domainobject.CarDO;
 import com.mytaxi.exception.ConstraintsViolationException;
