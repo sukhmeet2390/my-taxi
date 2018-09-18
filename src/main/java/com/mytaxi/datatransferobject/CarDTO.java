@@ -3,14 +3,10 @@ package com.mytaxi.datatransferobject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @Builder
 public class CarDTO {
@@ -25,5 +21,4 @@ public class CarDTO {
     private Boolean deleted;
     private String color;
     private String model;
-
 }

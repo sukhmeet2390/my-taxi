@@ -12,14 +12,34 @@ public class SearchResultMapper {
     public static SearchResultDTO makeSearchResultDTO(DriverCarDO driverCarDO) {
         final DriverDO driverDO = driverCarDO.getDriverDO();
         final CarDO carDO = driverCarDO.getCarDO();
-        return new SearchResultDTO(driverDO.getUsername(), driverDO.getCoordinate(),
-                carDO.getLicensePlate(), carDO.getSeatCount(), carDO.isConvertible(),
-                carDO.getRating(), carDO.getEngine().toString(), carDO.getManufacturer(),
-                carDO.getDeleted(), carDO.getColor(), carDO.getModel());
+        return SearchResultDTO.builder()
+                .username(driverDO.getUsername())
+                .coordinate(driverDO.getCoordinate())
+                .licensePlate(carDO.getLicensePlate())
+                .seatCount(carDO.getSeatCount())
+                .convertible(carDO.isConvertible())
+                .rating(carDO.getRating())
+                .engine(carDO.getEngine().toString())
+                .manufacturer(carDO.getManufacturer())
+                .deleted(carDO.getDeleted())
+                .color(carDO.getColor())
+                .model(carDO.getModel()).build();
     }
 
-    public static List<SearchResultDTO> makeSearchResultDTOList(List<DriverCarDO> driverCarDOList) {
+    public static List<SearchResultDTO> makeSearchResultDTOListFromDriverCarDO(List<DriverCarDO> driverCarDOList) {
         return driverCarDOList.stream()
                 .map(SearchResultMapper::makeSearchResultDTO).collect(Collectors.toList());
+    }
+
+    public static SearchResultDTO makeSearchResultDTOFromDriverDO(DriverDO driverDO) {
+        return SearchResultDTO.builder()
+                .username(driverDO.getUsername())
+                .coordinate(driverDO.getCoordinate())
+                .build();
+    }
+
+    public static List<SearchResultDTO> makeSearchResultDTOListFromDriverDO(List<DriverDO> driverDOList) {
+        return driverDOList.stream()
+                .map(SearchResultMapper::makeSearchResultDTOFromDriverDO).collect(Collectors.toList());
     }
 }
