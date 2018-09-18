@@ -1,4 +1,4 @@
-package com.mytaxi.dataaccessobject;
+package com.mytaxi.specification;
 
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.util.SearchCriteria;

@@ -1,6 +1,5 @@
-package com.mytaxi.dataaccessobject;
+package com.mytaxi.specification;
 
-import com.mytaxi.domainobject.DriverCarDO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.util.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
