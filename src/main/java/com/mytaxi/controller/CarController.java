@@ -37,8 +37,7 @@ public class CarController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CarDTO createCar(@Valid @RequestBody CarDTO car) throws ConstraintsViolationException {
-        CarDO carDO = CarMapper.makeCarDO(car);
-        return CarMapper.makeCarDTO(carService.create(carDO));
+        return CarMapper.makeCarDTO(carService.create(CarMapper.makeCarDO(car)));
     }
 
     @PutMapping("/{carId}")

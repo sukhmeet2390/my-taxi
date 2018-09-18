@@ -2,12 +2,13 @@ package com.mytaxi.datatransferobject;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mytaxi.domainvalue.GeoCoordinate;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchResultDTO {
     private String username;
     private GeoCoordinate coordinate;

@@ -3,12 +3,13 @@ package com.mytaxi.datatransferobject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @JsonInclude(Include.NON_NULL)
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CarDTO {
     @JsonIgnore
     private Long id;
