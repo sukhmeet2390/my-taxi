@@ -30,17 +30,17 @@ public class DefaultDriveCarService implements DriverCarService {
 
     @Override
     public DriverCarDO selectCar(Long driverId, Long carId) throws EntityNotFoundException, CarAlreadyInUseException, ConstraintsViolationException {
-        DriverCarDO alreadySelectedCar = driverCarRepository.findByCarId(carId);
+        DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
         if (alreadySelectedCar != null) throw new CarAlreadyInUseException("Car Already in use by some other driver");
 
         DriverCarDO driverCarDO = null;
         try {
             final DriverDO driverDO = driverService.find(driverId);
             final CarDO carDO = carService.find(carId);
-            if (driverDO != null && carDO != null && OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
+            if (OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
                 driverCarDO = new DriverCarDO();
-                driverCarDO.setCarId(carId);
-                driverCarDO.setDriverId(driverId);
+                driverCarDO.setCarDO(carDO);
+                driverCarDO.setDriverDO(driverDO);
                 driverCarRepository.save(driverCarDO);
             }else{
                 throw new ConstraintsViolationException("Driver needs to be online to deselect the car");
@@ -58,7 +58,7 @@ public class DefaultDriveCarService implements DriverCarService {
             final DriverDO driverDO = driverService.find(driverId);
             final CarDO carDO = carService.find(carId);
             if (driverDO != null && carDO != null && OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
-                DriverCarDO driverCarDO = driverCarRepository.findByDriverIdAndCarId(driverId, carId);
+                DriverCarDO driverCarDO = driverCarRepository.findByDriverDO_IdAndCarDO_Id(driverId, carId);
                 driverCarRepository.delete(driverCarDO);
             }else{
                 throw new ConstraintsViolationException("Driver needs to be online to deselect the car");

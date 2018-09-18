@@ -27,9 +27,11 @@ public class DriverCarDO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dateUpdated = ZonedDateTime.now();
 
-    @Column(name = "driver_id")
-    private Long driverId;
+    @ManyToOne
+    @JoinColumn(name = "driver_id", nullable = false)
+    private DriverDO driverDO;
 
-    @Column(name = "car_id")
-    private Long carId;
+    @ManyToOne
+    @JoinColumn(name = "car_id", nullable = false)
+    private CarDO carDO;
 }

@@ -2,8 +2,10 @@ package com.mytaxi.controller;
 
 import com.mytaxi.controller.mapper.DriverCarMapper;
 import com.mytaxi.controller.mapper.DriverMapper;
+import com.mytaxi.controller.mapper.SearchResultMapper;
 import com.mytaxi.datatransferobject.DriverCarDTO;
 import com.mytaxi.datatransferobject.DriverDTO;
+import com.mytaxi.datatransferobject.SearchResultDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.CarAlreadyInUseException;
@@ -82,9 +84,14 @@ public class DriverController {
         driverCarService.deselectCar(driverId, carId);
     }
 
-    @GetMapping("/search")
-    public List<DriverDTO> searchDrivers(@RequestParam("q") String query) {
-        return DriverMapper.makeDriverDTOList(driverService.search(query));
+    @GetMapping("/search/selected")
+    public List<SearchResultDTO> searchSelectedDrivers(@RequestParam("q") String query) {
+        return SearchResultMapper.makeSearchResultDTOList(driverService.searchSelected(query));
+    }
+
+    @GetMapping("/search/unselected")
+    public List<DriverDTO> searchUnSelectedDrivers(@RequestParam("q") String query) {
+        return DriverMapper.makeDriverDTOList(driverService.searchUnselected(query));
     }
 
 }

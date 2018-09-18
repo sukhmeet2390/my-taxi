@@ -1,7 +1,10 @@
 package com.mytaxi.service.driver;
 
+import com.mytaxi.dataaccessobject.DriverCarRepository;
+import com.mytaxi.dataaccessobject.DriverCarSpecificationBuilder;
 import com.mytaxi.dataaccessobject.DriverRepository;
 import com.mytaxi.dataaccessobject.DriverSpecificationBuilder;
+import com.mytaxi.domainobject.DriverCarDO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service to encapsulate the link between DAO and controller and to have business logic for some driver specific things.
@@ -30,10 +35,12 @@ public class DefaultDriverService implements DriverService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDriverService.class);
 
     private final DriverRepository driverRepository;
+    private final DriverCarRepository driverCarRepository;
 
 
-    public DefaultDriverService(final DriverRepository driverRepository) {
+    public DefaultDriverService(final DriverRepository driverRepository, DriverCarRepository driverCarRepository) {
         this.driverRepository = driverRepository;
+        this.driverCarRepository = driverCarRepository;
     }
 
 
@@ -111,18 +118,38 @@ public class DefaultDriverService implements DriverService {
     }
 
     @Override
-    public List<DriverDO> search(String query) {
-        DriverSpecificationBuilder builder = new DriverSpecificationBuilder();
+    public List<DriverCarDO> searchSelected(String query) {
+        DriverCarSpecificationBuilder builder = new DriverCarSpecificationBuilder();
         Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+        Matcher matcher = pattern.matcher(query + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+        }
+        final Specification<DriverCarDO> specification = builder.build();
+        log.info("Spec" + specification);
+        final Iterable<DriverCarDO> result = driverCarRepository.findAll(specification);
+        log.debug("------------" + result);
+        return StreamSupport
+                .stream(result.spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DriverDO> searchUnselected(String query) {
+        DriverSpecificationBuilder builder = new DriverSpecificationBuilder();
+        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?),");
         Matcher matcher = pattern.matcher(query + ",");
         while (matcher.find()) {
             builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
         }
         final Specification<DriverDO> specification = builder.build();
         log.info("Spec" + specification);
-        return driverRepository.findAll(specification);
+        final Iterable<DriverDO> result = driverRepository.findAll(specification);
+        log.debug("------------" + result);
+        return StreamSupport
+                .stream(result.spliterator(), false)
+                .collect(Collectors.toList());
     }
-
 
     private DriverDO findDriverChecked(Long driverId) throws EntityNotFoundException {
         return driverRepository.findById(driverId)

@@ -21,7 +21,7 @@ public class CarMapper {
                 .licensePlate(carDO.getLicensePlate())
                 .seatCount(carDO.getSeatCount())
                 .rating(carDO.getRating())
-                .engine(carDO.getEngineType().toString())
+                .engine(carDO.getEngine().toString())
                 .manufacturer(carDO.getManufacturer())
                 .deleted(carDO.getDeleted())
                 .convertible(carDO.isConvertible())

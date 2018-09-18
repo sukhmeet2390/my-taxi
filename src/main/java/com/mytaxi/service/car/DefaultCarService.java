@@ -46,7 +46,7 @@ public class DefaultCarService implements CarService {
         log.trace("Update car " + car);
         CarDO updateCar = find(id);
         updateCar.setConvertible(car.isConvertible());
-        updateCar.setEngineType(car.getEngineType());
+        updateCar.setEngine(car.getEngine());
         updateCar.setLicensePlate(car.getLicensePlate());
         updateCar.setRating(car.getRating());
         updateCar.setSeatCount(car.getSeatCount());

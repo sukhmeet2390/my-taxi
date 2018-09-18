@@ -2,7 +2,6 @@ package com.mytaxi.dataaccessobject;
 
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.util.SearchCriteria;
-import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -10,7 +9,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-@Getter
 public class DriverSpecification implements Specification<DriverDO> {
     private final SearchCriteria criteria;
 
@@ -25,10 +23,6 @@ public class DriverSpecification implements Specification<DriverDO> {
         final String key = criteria.getKey();
         final String value = criteria.getValue();
         switch (operation) {
-            case ">":
-                return builder.greaterThanOrEqualTo(root.get(key), value);
-            case "<":
-                return builder.lessThanOrEqualTo(root.get(key), value);
             case ":":
                 if (root.get(key).getJavaType() == String.class) {
                     return builder.like(root.get(key), "%" + value + "%");
