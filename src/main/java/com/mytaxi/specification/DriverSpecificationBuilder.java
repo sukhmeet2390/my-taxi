@@ -34,7 +34,7 @@ public class DriverSpecificationBuilder {
 
         Specification<DriverDO> result = specs.get(0);
         for (int i = 1; i < specs.size(); i++) {
-            result = where(result).and(specs.get(i));
+            result = Specification.where(result).and(specs.get(i));
         }
         return result;
     }
