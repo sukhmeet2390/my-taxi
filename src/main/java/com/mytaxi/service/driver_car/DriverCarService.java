@@ -9,6 +9,6 @@ import com.mytaxi.exception.EntityNotFoundException;
 public interface DriverCarService {
     DriverCarDO selectCar(Long driverId, Long carId) throws EntityNotFoundException, CarAlreadyInUseException, ConstraintsViolationException;
 
-    void deselectCar(Long driverId, Long carId) throws EntityNotFoundException, ConstraintsViolationException;
+    void deselectCar(Long driverId, Long carId) throws EntityNotFoundException, ConstraintsViolationException, CarAlreadyInUseException;
 
 }

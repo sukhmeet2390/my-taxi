@@ -10,6 +10,7 @@ import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.CarAlreadyInUseException;
 import com.mytaxi.exception.ConstraintsViolationException;
+import com.mytaxi.exception.DriverNotFoundException;
 import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.service.driver.DriverService;
 import com.mytaxi.service.driver_car.DriverCarService;
@@ -27,10 +28,8 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/drivers")
 public class DriverController {
-
     private final DriverService driverService;
     private final DriverCarService driverCarService;
-
 
     @Autowired
     public DriverController(final DriverService driverService, final DriverCarService driverCarService) {
@@ -38,12 +37,10 @@ public class DriverController {
         this.driverCarService = driverCarService;
     }
 
-
     @GetMapping("/{driverId}")
-    public DriverDTO getDriver(@PathVariable long driverId) throws EntityNotFoundException {
+    public DriverDTO getDriver(@PathVariable long driverId) throws DriverNotFoundException {
         return DriverMapper.makeDriverDTO(driverService.find(driverId));
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -68,6 +65,7 @@ public class DriverController {
 
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus) {
         return DriverMapper.makeDriverDTOList(driverService.find(onlineStatus));
     }
@@ -80,18 +78,17 @@ public class DriverController {
 
     @PutMapping("/{driverId}/deselect-car/{carId}")
     public void deselectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException {
+                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
         driverCarService.deselectCar(driverId, carId);
     }
 
     @GetMapping("/search/selected")
     public List<SearchResultDTO> searchSelectedDrivers(@RequestParam("q") String query) {
-        return SearchResultMapper.makeSearchResultDTOList(driverService.searchSelected(query));
+        return SearchResultMapper.makeSearchResultDTOListFromDriverCarDO(driverService.searchSelected(query));
     }
 
     @GetMapping("/search/unselected")
-    public List<DriverDTO> searchUnSelectedDrivers(@RequestParam("q") String query) {
-        return DriverMapper.makeDriverDTOList(driverService.searchUnselected(query));
+    public List<SearchResultDTO> searchUnSelectedDrivers(@RequestParam("q") String query) {
+        return SearchResultMapper.makeSearchResultDTOListFromDriverDO(driverService.searchUnselected(query));
     }
-
 }

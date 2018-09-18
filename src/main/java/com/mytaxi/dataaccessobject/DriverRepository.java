@@ -13,7 +13,8 @@ import java.util.List;
  * Database Access Object for driver table.
  * <p/>
  */
-public interface DriverRepository extends JpaRepository<DriverDO, Long>, JpaSpecificationExecutor<DriverDO> {
+public interface DriverRepository extends JpaRepository<DriverDO, Long>,
+        JpaSpecificationExecutor<DriverDO> {
 
     List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus);
 

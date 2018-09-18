@@ -2,6 +2,7 @@ package com.mytaxi.service.car;
 
 import com.mytaxi.dataaccessobject.CarRepository;
 import com.mytaxi.domainobject.CarDO;
+import com.mytaxi.exception.CarNotFoundException;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,29 +22,29 @@ public class DefaultCarService implements CarService {
     }
 
     @Override
-    public CarDO find(Long carId) throws EntityNotFoundException {
-        return carRepository.findById(carId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(("Could not find entity with id: " + carId)));
+    public CarDO find(Long carId) throws CarNotFoundException {
+        log.trace("Find car {}", carId);
+        return carRepository.findById(carId).orElseThrow(() ->
+                new CarNotFoundException(("Could not find car with id: " + carId)));
     }
 
     @Override
-    public CarDO create(CarDO car) throws ConstraintsViolationException {
-        log.trace("Create Car");
-        CarDO carDO;
+    public CarDO create(CarDO carDO) throws ConstraintsViolationException {
+        log.debug("Create Car {}", carDO);
+        CarDO car;
         try {
-            carDO = carRepository.save(car);
+            car = carRepository.save(carDO);
         } catch (DataIntegrityViolationException e) {
-            log.warn("ConstraintsViolationException while creating a driver: {}", car, e);
+            log.warn("ConstraintsViolationException while creating a car: {}", carDO, e);
             throw new ConstraintsViolationException(e.getMessage());
         }
-        return carDO;
+        return car;
     }
 
     @Override
     @Transactional
     public CarDO update(Long id, CarDO car) throws EntityNotFoundException, ConstraintsViolationException {
-        log.trace("Update car " + car);
+        log.debug("Update car " + car);
         CarDO updateCar = find(id);
         updateCar.setConvertible(car.isConvertible());
         updateCar.setEngine(car.getEngine());
@@ -58,13 +59,14 @@ public class DefaultCarService implements CarService {
 
     @Override
     public List<CarDO> getCars() {
-        log.trace("Demanded all cars");
+        log.debug("Demanded all cars");
         return carRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void delete(Long carId) throws EntityNotFoundException {
-        log.trace("Delete Car " + carId);
+        log.debug("Delete Car " + carId);
         carRepository.deleteById(carId);
     }
 }

@@ -3,6 +3,7 @@ package com.mytaxi.controller;
 import com.mytaxi.controller.mapper.CarMapper;
 import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainobject.CarDO;
+import com.mytaxi.exception.CarNotFoundException;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.service.car.CarService;
@@ -29,7 +30,7 @@ public class CarController {
     }
 
     @GetMapping("/{carId}")
-    public CarDTO findCar(@PathVariable long carId) throws EntityNotFoundException {
+    public CarDTO findCar(@PathVariable long carId) throws CarNotFoundException {
         return CarMapper.makeCarDTO(carService.find(carId));
     }
 

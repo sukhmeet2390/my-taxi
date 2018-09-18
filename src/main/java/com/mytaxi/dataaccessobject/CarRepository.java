@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- * Database Access Object for driver table.
+ * Database Access Object for car table.
  * <p/>
  */
 public interface CarRepository extends CrudRepository<CarDO, Long> {
