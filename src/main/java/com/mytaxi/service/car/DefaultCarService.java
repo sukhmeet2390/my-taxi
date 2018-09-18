@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -34,8 +36,8 @@ public class DefaultCarService implements CarService {
         CarDO car;
         try {
             car = carRepository.save(carDO);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("ConstraintsViolationException while creating a car: {}", carDO, e);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            log.warn("ConstraintsViolationException while creating a car: {}", carDO, e.getMessage());
             throw new ConstraintsViolationException(e.getMessage());
         }
         return car;
@@ -67,6 +69,7 @@ public class DefaultCarService implements CarService {
     @Transactional
     public void delete(Long carId) throws EntityNotFoundException {
         log.debug("Delete Car " + carId);
-        carRepository.deleteById(carId);
+        CarDO carDO = find(carId);
+        carDO.setDeleted(true);
     }
 }
