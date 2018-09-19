@@ -1,6 +1,7 @@
 package com.mytaxi.domainobject;
 
 import com.mytaxi.domainvalue.EngineType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,7 @@ import java.time.ZonedDateTime;
         uniqueConstraints = @UniqueConstraint(name = "uc_license_plate", columnNames = {"license_plate"})
 )
 @AllArgsConstructor
-@NoArgsConstructor
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CarDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

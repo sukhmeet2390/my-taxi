@@ -1,5 +1,6 @@
 package com.mytaxi.domainobject;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,7 +16,7 @@ import static java.time.ZonedDateTime.now;
         uniqueConstraints = @UniqueConstraint(name = "uc_car_id_driver_id", columnNames = {"car_id", "driver_id"})
 )
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriverCarDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

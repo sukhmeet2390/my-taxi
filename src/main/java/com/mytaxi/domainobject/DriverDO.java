@@ -3,7 +3,9 @@ package com.mytaxi.domainobject;
 import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.time.ZonedDateTime;
         uniqueConstraints = @UniqueConstraint(name = "uc_username", columnNames = {"username"})
 )
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Setter
 public class DriverDO {
 
     @Id
@@ -56,57 +60,6 @@ public class DriverDO {
         this.coordinate = null;
         this.dateCoordinateUpdated = null;
         this.onlineStatus = OnlineStatus.OFFLINE;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-
-    public OnlineStatus getOnlineStatus() {
-        return onlineStatus;
-    }
-
-
-    public void setOnlineStatus(OnlineStatus onlineStatus) {
-        this.onlineStatus = onlineStatus;
-    }
-
-
-    public GeoCoordinate getCoordinate() {
-        return coordinate;
-    }
-
-
-    public void setCoordinate(GeoCoordinate coordinate) {
-        this.coordinate = coordinate;
-        this.dateCoordinateUpdated = ZonedDateTime.now();
     }
 
 }
