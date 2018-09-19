@@ -2,6 +2,8 @@ package com.mytaxi.domainobject;
 
 import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.time.ZonedDateTime;
         name = "driver",
         uniqueConstraints = @UniqueConstraint(name = "uc_username", columnNames = {"username"})
 )
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriverDO {
 
     @Id
@@ -44,10 +47,6 @@ public class DriverDO {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OnlineStatus onlineStatus;
-
-
-    private DriverDO() {
-    }
 
 
     public DriverDO(String username, String password) {

@@ -8,10 +8,7 @@ import com.mytaxi.datatransferobject.DriverDTO;
 import com.mytaxi.datatransferobject.SearchResultDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
-import com.mytaxi.exception.CarAlreadyInUseException;
-import com.mytaxi.exception.ConstraintsViolationException;
-import com.mytaxi.exception.DriverNotFoundException;
-import com.mytaxi.exception.EntityNotFoundException;
+import com.mytaxi.exception.*;
 import com.mytaxi.service.driver.DriverService;
 import com.mytaxi.service.driver_car.DriverCarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +56,7 @@ public class DriverController {
     @PutMapping("/{driverId}")
     public void updateLocation(@PathVariable long driverId, @RequestParam double longitude,
                                @RequestParam double latitude)
-            throws EntityNotFoundException {
+            throws DriverNotFoundException {
         driverService.updateLocation(driverId, longitude, latitude);
     }
 
@@ -72,7 +69,7 @@ public class DriverController {
 
     @PutMapping("/{driverId}/select-car/{carId}")
     public DriverCarDTO selectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                           @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
+                                           @PathVariable(name = "carId") Long carId) throws DriverNotFoundException,CarNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
         return DriverCarMapper.makeDriverCarDTO(driverCarService.selectCar(driverId, carId));
     }
 

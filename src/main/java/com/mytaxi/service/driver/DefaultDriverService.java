@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +65,7 @@ public class DefaultDriverService implements DriverService {
         DriverDO driver;
         try {
             driver = driverRepository.save(driverDO);
-        } catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             log.warn("ConstraintsViolationException while creating a driver: {}", driverDO, e);
             throw new ConstraintsViolationException(e.getMessage());
         }
@@ -79,10 +80,11 @@ public class DefaultDriverService implements DriverService {
      */
     @Override
     @Transactional
-    public void delete(Long driverId) throws EntityNotFoundException {
+    public DriverDO delete(Long driverId) throws EntityNotFoundException {
         log.debug("Delete driver {}", driverId);
         DriverDO driverDO = findDriverChecked(driverId);
         driverDO.setDeleted(true);
+        return driverRepository.save(driverDO);
     }
 
 
@@ -96,10 +98,11 @@ public class DefaultDriverService implements DriverService {
      */
     @Override
     @Transactional
-    public void updateLocation(long driverId, double longitude, double latitude) throws EntityNotFoundException {
+    public DriverDO updateLocation(long driverId, double longitude, double latitude) throws DriverNotFoundException {
         log.debug("Update location {} / {} / {} ", driverId, longitude, latitude);
         DriverDO driverDO = findDriverChecked(driverId);
         driverDO.setCoordinate(new GeoCoordinate(latitude, longitude));
+        return driverDO;
     }
 
 

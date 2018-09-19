@@ -41,13 +41,13 @@ public class CarController {
     }
 
     @PutMapping("/{carId}")
-    public CarDTO updateCar(@PathVariable(value = "carId") Long id, @RequestBody CarDTO carDTO) throws ConstraintsViolationException, EntityNotFoundException {
+    public CarDTO updateCar(@PathVariable(value = "carId") Long id, @RequestBody CarDTO carDTO) throws ConstraintsViolationException, CarNotFoundException {
         carDTO.setId(id);
         return CarMapper.makeCarDTO(carService.update(id, CarMapper.makeCarDO(carDTO)));
     }
 
     @DeleteMapping("/{carId}")
-    public void deleteCar(@PathVariable(value = "carId") Long id) throws EntityNotFoundException {
+    public void deleteCar(@PathVariable(value = "carId") Long id) throws CarNotFoundException {
         carService.delete(id);
     }
 }

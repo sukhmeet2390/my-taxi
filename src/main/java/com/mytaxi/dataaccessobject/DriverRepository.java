@@ -18,5 +18,4 @@ public interface DriverRepository extends JpaRepository<DriverDO, Long>,
 
     List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus);
 
-    List<DriverDO> findAll(@Nullable Specification<DriverDO> spec);
 }

@@ -4,13 +4,11 @@ import com.mytaxi.dataaccessobject.CarRepository;
 import com.mytaxi.domainobject.CarDO;
 import com.mytaxi.exception.CarNotFoundException;
 import com.mytaxi.exception.ConstraintsViolationException;
-import com.mytaxi.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class DefaultCarService implements CarService {
 
     @Override
     public CarDO find(Long carId) throws CarNotFoundException {
-        log.trace("Find car {}", carId);
+        log.debug("Find car {}", carId);
         return carRepository.findById(carId).orElseThrow(() ->
                 new CarNotFoundException(("Could not find car with id: " + carId)));
     }
@@ -45,7 +43,7 @@ public class DefaultCarService implements CarService {
 
     @Override
     @Transactional
-    public CarDO update(Long id, CarDO car) throws EntityNotFoundException, ConstraintsViolationException {
+    public CarDO update(Long id, CarDO car) throws CarNotFoundException, ConstraintsViolationException {
         log.debug("Update car " + car);
         CarDO updateCar = find(id);
         updateCar.setConvertible(car.isConvertible());
@@ -56,7 +54,13 @@ public class DefaultCarService implements CarService {
         updateCar.setColor(car.getColor());
         updateCar.setModel(car.getModel());
         updateCar.setManufacturer(car.getManufacturer());
-        return updateCar;
+        try {
+            return carRepository.save(updateCar);
+        } catch (ConstraintViolationException e) {
+            log.debug("Unable to save car data {}", updateCar);
+            throw new ConstraintsViolationException(e.getMessage());
+        }
+
     }
 
     @Override
@@ -67,9 +71,10 @@ public class DefaultCarService implements CarService {
 
     @Override
     @Transactional
-    public void delete(Long carId) throws EntityNotFoundException {
+    public CarDO delete(Long carId) throws CarNotFoundException {
         log.debug("Delete Car " + carId);
         CarDO carDO = find(carId);
         carDO.setDeleted(true);
+        return carRepository.save(carDO);
     }
 }

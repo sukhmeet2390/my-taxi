@@ -5,9 +5,7 @@ import com.mytaxi.domainobject.CarDO;
 import com.mytaxi.domainobject.DriverCarDO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
-import com.mytaxi.exception.CarAlreadyInUseException;
-import com.mytaxi.exception.DriverOfflineException;
-import com.mytaxi.exception.EntityNotFoundException;
+import com.mytaxi.exception.*;
 import com.mytaxi.service.car.CarService;
 import com.mytaxi.service.driver.DriverService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,28 +27,26 @@ public class DefaultDriveCarService implements DriverCarService {
     }
 
     @Override
-    public DriverCarDO selectCar(Long driverId, Long carId) throws EntityNotFoundException,
+    public DriverCarDO selectCar(Long driverId, Long carId) throws DriverNotFoundException,CarNotFoundException,
             CarAlreadyInUseException, DriverOfflineException {
         log.debug("Select Car {} / {}", driverId, carId);
         DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
         if (alreadySelectedCar != null) throw new CarAlreadyInUseException("Car Already in use by some other driver");
-        DriverCarDO driverCarDO;
         try {
             DriverDO driverDO = driverService.find(driverId);
             CarDO carDO = carService.find(carId);
             if (OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
-                driverCarDO = new DriverCarDO();
-                driverCarDO.setCarDO(carDO);
-                driverCarDO.setDriverDO(driverDO);
-                driverCarRepository.save(driverCarDO);
+                return driverCarRepository.save(new DriverCarDO(driverDO, carDO));
             } else {
                 throw new DriverOfflineException("Driver needs to be online to select the car");
             }
-        } catch (EntityNotFoundException e) {
-            log.debug("Car Data or Driver data not found" + carId + " " + driverId);
+        } catch (DriverNotFoundException e) {
+            log.debug("Driver data not found" + carId + " " + driverId);
+            throw e;
+        } catch (CarNotFoundException e) {
+            log.debug("Car Data not found" + carId + " " + driverId);
             throw e;
         }
-        return driverCarDO;
     }
 
     @Override
