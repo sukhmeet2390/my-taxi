@@ -1,4 +1,4 @@
-package com.mytaxi.controller;
+package com.mytaxi.exceptionhandler;
 
 import com.mytaxi.datatransferobject.GenericErrorDTO;
 import com.mytaxi.exception.*;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
-public class ExceptionController {
+public class ExceptionsHandler {
     @ExceptionHandler(CarAlreadyInUseException.class)
     public ResponseEntity<GenericErrorDTO> carAlreadyInUseHandler(CarAlreadyInUseException e) {
         final GenericErrorDTO err = new GenericErrorDTO(HttpStatus.CONFLICT.value(), e.getMessage());

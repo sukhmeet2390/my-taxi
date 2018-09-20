@@ -34,7 +34,7 @@ public class DefaultDriverService implements DriverService {
     private final DriverRepository driverRepository;
     private final DriverCarRepository driverCarRepository;
 
-    public DefaultDriverService(final DriverRepository driverRepository, DriverCarRepository driverCarRepository) {
+    public DefaultDriverService(DriverRepository driverRepository, DriverCarRepository driverCarRepository) {
         this.driverRepository = driverRepository;
         this.driverCarRepository = driverCarRepository;
     }

@@ -29,7 +29,7 @@ public class DriverController {
     private final DriverCarService driverCarService;
 
     @Autowired
-    public DriverController(final DriverService driverService, final DriverCarService driverCarService) {
+    public DriverController(DriverService driverService, DriverCarService driverCarService) {
         this.driverService = driverService;
         this.driverCarService = driverCarService;
     }

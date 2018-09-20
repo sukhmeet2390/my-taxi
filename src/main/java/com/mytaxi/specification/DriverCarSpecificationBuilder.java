@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * <p>
  * Builder for encapsulating  the link between Specification and driverCar Search.
@@ -18,8 +19,8 @@ public class DriverCarSpecificationBuilder {
         params = new ArrayList<>();
     }
 
-    public DriverCarSpecificationBuilder with(final String key, final String operation,
-                                              final String value) {
+    public DriverCarSpecificationBuilder with(String key, String operation,
+                                              String value) {
         params.add(new SearchCriteria(key, operation, value));
         return this;
     }

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.Specifications.where;
 /**
  * <p>
  * Builder for encapsulating  the link between Specification and driver Search.
@@ -20,8 +19,8 @@ public class DriverSpecificationBuilder {
         params = new ArrayList<>();
     }
 
-    public DriverSpecificationBuilder with(final String key, final String operation,
-                                              final String value) {
+    public DriverSpecificationBuilder with(String key, String operation,
+                                           String value) {
         params.add(new SearchCriteria(key, operation, value));
         return this;
     }
