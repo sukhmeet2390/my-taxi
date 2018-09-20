@@ -4,10 +4,10 @@ import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
+
 import java.util.List;
 
-public interface DriverService
-{
+public interface DriverService {
 
     DriverDO find(Long driverId) throws EntityNotFoundException;
 
