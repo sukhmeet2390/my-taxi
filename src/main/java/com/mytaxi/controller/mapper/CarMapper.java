@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CarMapper {
-    public static List<CarDTO> makeDriverDTOList(Collection<CarDO> cars) {
+    public static List<CarDTO> makeCarDTOList(Collection<CarDO> cars) {
         return cars.stream()
                 .map(CarMapper::makeCarDTO)
                 .collect(Collectors.toList());

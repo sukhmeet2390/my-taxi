@@ -27,7 +27,7 @@ public class DefaultDriveCarService implements DriverCarService {
     }
 
     @Override
-    public DriverCarDO selectCar(Long driverId, Long carId) throws DriverNotFoundException,CarNotFoundException,
+    public DriverCarDO  selectCar(Long driverId, Long carId) throws DriverNotFoundException, CarNotFoundException,
             CarAlreadyInUseException, DriverOfflineException {
         log.debug("Select Car {} / {}", driverId, carId);
         DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
@@ -50,7 +50,7 @@ public class DefaultDriveCarService implements DriverCarService {
     }
 
     @Override
-    public void deselectCar(Long driverId, Long carId) throws EntityNotFoundException, DriverOfflineException, CarAlreadyInUseException {
+    public void deselectCar(Long driverId, Long carId) throws CarNotFoundException,DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         log.debug("Deselect Car {} / {}", driverId, carId);
         final DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
         if (alreadySelectedCar == null || !alreadySelectedCar.getDriverDO().getId().equals(driverId)) {

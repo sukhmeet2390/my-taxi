@@ -48,7 +48,7 @@ public class DriverController {
 
 
     @DeleteMapping("/{driverId}")
-    public void deleteDriver(@PathVariable long driverId) throws EntityNotFoundException {
+    public void deleteDriver(@PathVariable long driverId) throws DriverNotFoundException {
         driverService.delete(driverId);
     }
 
@@ -69,13 +69,14 @@ public class DriverController {
 
     @PutMapping("/{driverId}/select-car/{carId}")
     public DriverCarDTO selectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                           @PathVariable(name = "carId") Long carId) throws DriverNotFoundException,CarNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
+                                           @PathVariable(name = "carId") Long carId)
+            throws DriverNotFoundException, CarNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         return DriverCarMapper.makeDriverCarDTO(driverCarService.selectCar(driverId, carId));
     }
 
     @PutMapping("/{driverId}/deselect-car/{carId}")
     public void deselectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                     @PathVariable(name = "carId") Long carId) throws EntityNotFoundException, ConstraintsViolationException, CarAlreadyInUseException {
+                                     @PathVariable(name = "carId") Long carId) throws CarNotFoundException,DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         driverCarService.deselectCar(driverId, carId);
     }
 

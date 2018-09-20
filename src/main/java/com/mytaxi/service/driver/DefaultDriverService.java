@@ -80,7 +80,7 @@ public class DefaultDriverService implements DriverService {
      */
     @Override
     @Transactional
-    public DriverDO delete(Long driverId) throws EntityNotFoundException {
+    public DriverDO delete(Long driverId) throws DriverNotFoundException {
         log.debug("Delete driver {}", driverId);
         DriverDO driverDO = findDriverChecked(driverId);
         driverDO.setDeleted(true);

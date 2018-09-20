@@ -15,7 +15,7 @@ public interface DriverService {
 
     DriverDO create(DriverDO driverDO) throws ConstraintsViolationException;
 
-    DriverDO delete(Long driverId) throws EntityNotFoundException;
+    DriverDO delete(Long driverId) throws DriverNotFoundException;
 
     DriverDO updateLocation(long driverId, double longitude, double latitude) throws DriverNotFoundException;
 

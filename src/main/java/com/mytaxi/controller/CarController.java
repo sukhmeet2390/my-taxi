@@ -2,10 +2,8 @@ package com.mytaxi.controller;
 
 import com.mytaxi.controller.mapper.CarMapper;
 import com.mytaxi.datatransferobject.CarDTO;
-import com.mytaxi.domainobject.CarDO;
 import com.mytaxi.exception.CarNotFoundException;
 import com.mytaxi.exception.ConstraintsViolationException;
-import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.service.car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,7 @@ public class CarController {
 
     @GetMapping
     public List<CarDTO> getAllCars() {
-        return CarMapper.makeDriverDTOList(carService.getCars());
+        return CarMapper.makeCarDTOList(carService.getCars());
     }
 
     @GetMapping("/{carId}")

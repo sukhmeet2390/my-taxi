@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 public class DriverDO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -62,4 +62,17 @@ public class DriverDO {
         this.onlineStatus = OnlineStatus.OFFLINE;
     }
 
+    @Override
+    public String toString() {
+        return "DriverDO{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", deleted=" + deleted +
+                ", coordinate=" + coordinate +
+                ", dateCoordinateUpdated=" + dateCoordinateUpdated +
+                ", onlineStatus=" + onlineStatus +
+                '}';
+    }
 }
