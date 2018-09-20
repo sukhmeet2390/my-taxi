@@ -9,4 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface DriverCarRepository extends CrudRepository<DriverCarDO, Long> {
     DriverCarDO findByDriverIdAndCarId(Long driverId, Long carId);
+
+    DriverCarDO findByCarId(Long carId);
 }
