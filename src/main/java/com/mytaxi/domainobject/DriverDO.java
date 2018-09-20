@@ -2,6 +2,10 @@ package com.mytaxi.domainobject;
 
 import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,10 +17,13 @@ import java.time.ZonedDateTime;
         name = "driver",
         uniqueConstraints = @UniqueConstraint(name = "uc_username", columnNames = {"username"})
 )
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Setter
 public class DriverDO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -46,10 +53,6 @@ public class DriverDO {
     private OnlineStatus onlineStatus;
 
 
-    private DriverDO() {
-    }
-
-
     public DriverDO(String username, String password) {
         this.username = username;
         this.password = password;
@@ -59,55 +62,17 @@ public class DriverDO {
         this.onlineStatus = OnlineStatus.OFFLINE;
     }
 
-
-    public Long getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "DriverDO{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", deleted=" + deleted +
+                ", coordinate=" + coordinate +
+                ", dateCoordinateUpdated=" + dateCoordinateUpdated +
+                ", onlineStatus=" + onlineStatus +
+                '}';
     }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-
-    public OnlineStatus getOnlineStatus() {
-        return onlineStatus;
-    }
-
-
-    public void setOnlineStatus(OnlineStatus onlineStatus) {
-        this.onlineStatus = onlineStatus;
-    }
-
-
-    public GeoCoordinate getCoordinate() {
-        return coordinate;
-    }
-
-
-    public void setCoordinate(GeoCoordinate coordinate) {
-        this.coordinate = coordinate;
-        this.dateCoordinateUpdated = ZonedDateTime.now();
-    }
-
 }

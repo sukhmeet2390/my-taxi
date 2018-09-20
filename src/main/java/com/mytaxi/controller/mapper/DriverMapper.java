@@ -14,17 +14,16 @@ public class DriverMapper {
     }
 
     public static DriverDTO makeDriverDTO(DriverDO driverDO) {
-        DriverDTO.DriverDTOBuilder driverDTOBuilder = DriverDTO.newBuilder()
-                .setId(driverDO.getId())
-                .setPassword(driverDO.getPassword())
-                .setUsername(driverDO.getUsername());
+        DriverDTO.DriverDTOBuilder driverDTOBuilder = DriverDTO.builder()
+                .id(driverDO.getId())
+                .password(driverDO.getPassword())
+                .username(driverDO.getUsername());
 
         GeoCoordinate coordinate = driverDO.getCoordinate();
         if (coordinate != null) {
-            driverDTOBuilder.setCoordinate(coordinate);
+            driverDTOBuilder.coordinate(coordinate);
         }
-
-        return driverDTOBuilder.createDriverDTO();
+        return driverDTOBuilder.build();
     }
 
     public static List<DriverDTO> makeDriverDTOList(Collection<DriverDO> drivers) {

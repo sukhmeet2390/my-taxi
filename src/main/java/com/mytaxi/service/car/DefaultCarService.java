@@ -2,13 +2,14 @@ package com.mytaxi.service.car;
 
 import com.mytaxi.dataaccessobject.CarRepository;
 import com.mytaxi.domainobject.CarDO;
+import com.mytaxi.exception.CarNotFoundException;
 import com.mytaxi.exception.ConstraintsViolationException;
-import com.mytaxi.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -21,50 +22,59 @@ public class DefaultCarService implements CarService {
     }
 
     @Override
-    public CarDO find(Long carId) throws EntityNotFoundException {
-        return carRepository.findById(carId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(("Could not find entity with id: " + carId)));
+    public CarDO find(Long carId) throws CarNotFoundException {
+        log.debug("Find car {}", carId);
+        return carRepository.findById(carId).orElseThrow(() ->
+                new CarNotFoundException(("Could not find car with id: " + carId)));
     }
 
     @Override
-    public CarDO create(CarDO car) throws ConstraintsViolationException {
-        log.trace("Create Car");
-        CarDO carDO;
+    public CarDO create(CarDO carDO) throws ConstraintsViolationException {
+        log.debug("Create Car {}", carDO);
+        CarDO car;
         try {
-            carDO = carRepository.save(car);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("ConstraintsViolationException while creating a driver: {}", car, e);
+            car = carRepository.save(carDO);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            log.warn("ConstraintsViolationException while creating a car: {}", carDO, e.getMessage());
             throw new ConstraintsViolationException(e.getMessage());
         }
-        return carDO;
+        return car;
     }
 
     @Override
     @Transactional
-    public CarDO update(Long id, CarDO car) throws EntityNotFoundException, ConstraintsViolationException {
-        log.trace("Update car " + car);
+    public CarDO update(Long id, CarDO car) throws CarNotFoundException, ConstraintsViolationException {
+        log.debug("Update car " + car);
         CarDO updateCar = find(id);
         updateCar.setConvertible(car.isConvertible());
-        updateCar.setEngineType(car.getEngineType());
+        updateCar.setEngine(car.getEngine());
         updateCar.setLicensePlate(car.getLicensePlate());
         updateCar.setRating(car.getRating());
         updateCar.setSeatCount(car.getSeatCount());
         updateCar.setColor(car.getColor());
         updateCar.setModel(car.getModel());
         updateCar.setManufacturer(car.getManufacturer());
-        return updateCar;
+        try {
+            return carRepository.save(updateCar);
+        } catch (ConstraintViolationException e) {
+            log.debug("Unable to save car data {}", updateCar);
+            throw new ConstraintsViolationException(e.getMessage());
+        }
+
     }
 
     @Override
     public List<CarDO> getCars() {
-        log.trace("Demanded all cars");
+        log.debug("Demanded all cars");
         return carRepository.findAll();
     }
 
     @Override
-    public void delete(Long carId) throws EntityNotFoundException {
-        log.trace("Delete Car " + carId);
-        carRepository.deleteById(carId);
+    @Transactional
+    public CarDO delete(Long carId) throws CarNotFoundException {
+        log.debug("Delete Car " + carId);
+        CarDO carDO = find(carId);
+        carDO.setDeleted(true);
+        return carRepository.save(carDO);
     }
 }

@@ -1,8 +1,8 @@
 package com.mytaxi.domainobject;
 
 import com.mytaxi.domainvalue.EngineType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,8 +18,7 @@ import java.time.ZonedDateTime;
         uniqueConstraints = @UniqueConstraint(name = "uc_license_plate", columnNames = {"license_plate"})
 )
 @AllArgsConstructor
-@NoArgsConstructor
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CarDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +41,7 @@ public class CarDO {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "engine_type", nullable = false)
-    private EngineType engineType;
+    private EngineType engine;
 
     @Column(nullable = false)
     @NotNull(message = "Manufacturer can not be null!")
@@ -62,14 +61,14 @@ public class CarDO {
 
     public CarDO(@NotNull(message = "License plate can not be null!") String licensePlate,
                  @NotNull(message = "Seat Count can not be null!") Integer seatCount,
-                 Float rating, EngineType engineType,
+                 Float rating, EngineType engine,
                  @NotNull(message = "Manufacturer can not be null!") String manufacturer,
                  Boolean deleted, boolean convertible, String color,
                  String model) {
         this.licensePlate = licensePlate;
         this.seatCount = seatCount;
         this.rating = rating;
-        this.engineType = engineType;
+        this.engine = engine;
         this.manufacturer = manufacturer;
         this.deleted = deleted;
         this.convertible = convertible;

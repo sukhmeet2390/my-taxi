@@ -4,7 +4,8 @@ import com.mytaxi.dataaccessobject.DriverCarRepository;
 import com.mytaxi.domainobject.CarDO;
 import com.mytaxi.domainobject.DriverCarDO;
 import com.mytaxi.domainobject.DriverDO;
-import com.mytaxi.exception.EntityNotFoundException;
+import com.mytaxi.domainvalue.OnlineStatus;
+import com.mytaxi.exception.*;
 import com.mytaxi.service.car.CarService;
 import com.mytaxi.service.driver.DriverService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,32 +27,43 @@ public class DefaultDriveCarService implements DriverCarService {
     }
 
     @Override
-    public DriverCarDO selectCar(Long driverId, Long carId) throws EntityNotFoundException {
-        DriverCarDO driverCarDO = null;
+    public DriverCarDO  selectCar(Long driverId, Long carId) throws DriverNotFoundException, CarNotFoundException,
+            CarAlreadyInUseException, DriverOfflineException {
+        log.debug("Select Car {} / {}", driverId, carId);
+        DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
+        if (alreadySelectedCar != null) throw new CarAlreadyInUseException("Car Already in use by some other driver");
         try {
-            final DriverDO driverDO = driverService.find(driverId);
-            final CarDO carDO = carService.find(carId);
-            if (driverDO != null || carDO != null) {
-                driverCarDO = new DriverCarDO();
-                driverCarDO.setCarId(carId);
-                driverCarDO.setDriverId(driverId);
-                driverCarRepository.save(driverCarDO);
+            DriverDO driverDO = driverService.find(driverId);
+            CarDO carDO = carService.find(carId);
+            if (OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
+                return driverCarRepository.save(new DriverCarDO(driverDO, carDO));
+            } else {
+                throw new DriverOfflineException("Driver needs to be online to select the car");
             }
-        } catch (EntityNotFoundException e) {
-            log.debug("Car Data or Driver data not found" + carId + " " + driverId);
+        } catch (DriverNotFoundException e) {
+            log.debug("Driver data not found" + carId + " " + driverId);
+            throw e;
+        } catch (CarNotFoundException e) {
+            log.debug("Car Data not found" + carId + " " + driverId);
             throw e;
         }
-        return driverCarDO;
     }
 
     @Override
-    public void deselectCar(Long driverId, Long carId) throws EntityNotFoundException {
+    public void deselectCar(Long driverId, Long carId) throws CarNotFoundException,DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
+        log.debug("Deselect Car {} / {}", driverId, carId);
+        final DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
+        if (alreadySelectedCar == null || !alreadySelectedCar.getDriverDO().getId().equals(driverId)) {
+            throw new CarAlreadyInUseException("Car is not selected by this driver.");
+        }
         try {
             final DriverDO driverDO = driverService.find(driverId);
             final CarDO carDO = carService.find(carId);
-            if (driverDO != null && carDO != null) {
-                DriverCarDO driverCarDO = driverCarRepository.findByDriverIdAndCarId(driverId, carId);
+            if (OnlineStatus.ONLINE.equals(driverDO.getOnlineStatus())) {
+                DriverCarDO driverCarDO = driverCarRepository.findByDriverDO_IdAndCarDO_Id(driverId, carId);
                 driverCarRepository.delete(driverCarDO);
+            } else {
+                throw new DriverOfflineException("Driver needs to be online to deselect the car");
             }
         } catch (EntityNotFoundException e) {
             log.info("Car Data or Driver data not found" + carId + " " + driverId);

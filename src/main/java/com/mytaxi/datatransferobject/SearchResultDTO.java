@@ -1,18 +1,17 @@
 package com.mytaxi.datatransferobject;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.mytaxi.domainvalue.GeoCoordinate;
 import lombok.*;
 
 @Data
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CarDTO {
-    @JsonIgnore
-    private Long id;
+public class SearchResultDTO {
+    private String username;
+    private GeoCoordinate coordinate;
     private String licensePlate;
     private Integer seatCount;
     private Boolean convertible;
