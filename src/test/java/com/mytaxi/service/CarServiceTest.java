@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
@@ -29,11 +30,11 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class CarServiceTest {
     private CarService carService;
+    @MockBean
     private CarRepository carRepository;
 
     @Before
     public void setUp() {
-        carRepository = Mockito.mock(CarRepository.class);
         carService = new DefaultCarService(carRepository);
     }
 

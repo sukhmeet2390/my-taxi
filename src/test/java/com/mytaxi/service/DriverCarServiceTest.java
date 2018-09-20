@@ -14,6 +14,7 @@ import com.mytaxi.service.driver_car.DriverCarService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -29,15 +30,15 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class DriverCarServiceTest {
     private DriverCarService driverCarService;
+    @MockBean
     private CarService carService;
+    @MockBean
     private DriverService driverService;
+    @MockBean
     private DriverCarRepository driverCarRepository;
 
     @Before
     public void setup() {
-        carService = mock(CarService.class);
-        driverService = mock(DriverService.class);
-        driverCarRepository = mock(DriverCarRepository.class);
         driverCarService = new DefaultDriveCarService(driverCarRepository, carService, driverService);
     }
 
@@ -105,4 +106,14 @@ public class DriverCarServiceTest {
         driverCarService.deselectCar(1L,1L);
     }
 
+    @Test(expected = CarAlreadyInUseException.class)
+    public void deselectCarInUseException() throws Exception{
+        t_driverDO1.setId(1L);
+        t_driverDO2.setId(2L);
+        when(driverCarRepository.findByCarDO_Id(anyLong())).thenReturn(t_driverCarDO2);
+        when(driverService.find(anyLong())).thenReturn(t_driverDO1);
+        when(carService.find(anyLong())).thenReturn(t_carDO1);
+        t_driverDO1.setId(1L);
+        driverCarService.deselectCar(1L,1L);
+    }
 }

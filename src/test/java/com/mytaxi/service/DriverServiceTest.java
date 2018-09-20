@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,14 +39,14 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class DriverServiceTest {
+    @MockBean
     private DriverRepository driverRepository;
+    @MockBean
     private DriverCarRepository driverCarRepository;
     private DriverService driverService;
 
     @Before
     public void setup() {
-        driverRepository = Mockito.mock(DriverRepository.class);
-        driverCarRepository = Mockito.mock(DriverCarRepository.class);
         driverService = new DefaultDriverService(driverRepository, driverCarRepository);
     }
 
