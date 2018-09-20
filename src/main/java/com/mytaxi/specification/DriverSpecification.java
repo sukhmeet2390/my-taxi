@@ -1,14 +1,18 @@
 package com.mytaxi.specification;
 
 import com.mytaxi.domainobject.DriverDO;
-import com.mytaxi.util.SearchCriteria;
+import com.mytaxi.domainvalue.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
+/**
+ * <p>
+ * Specification to encapsulate the link between repository and driver Search.
+ * <p/>
+ */
 public class DriverSpecification implements Specification<DriverDO> {
     private final SearchCriteria criteria;
 

@@ -1,4 +1,4 @@
-package com.mytaxi.util;
+package com.mytaxi.domainvalue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

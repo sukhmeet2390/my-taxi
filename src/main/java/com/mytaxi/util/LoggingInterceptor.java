@@ -8,9 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class LoggingInterceptor extends HandlerInterceptorAdapter {
-
     private static final Log LOG = LogFactory.getLog(LoggingInterceptor.class);
-
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {

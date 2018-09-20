@@ -75,4 +75,5 @@ public class CarDO {
         this.color = color;
         this.model = model;
     }
+
 }

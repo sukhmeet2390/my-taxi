@@ -10,12 +10,9 @@ import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.DriverNotFoundException;
 import com.mytaxi.service.driver.DefaultDriverService;
 import com.mytaxi.service.driver.DriverService;
-import com.mytaxi.specification.DriverCarSpecification;
-import com.mytaxi.util.SearchCriteria;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,11 +27,11 @@ import static com.mytaxi.TestConstants.*;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -122,13 +119,13 @@ public class DriverServiceTest {
     }
 
     @Test
-    public void testUnSelectedByQuery(){
+    public void testUnSelectedByQuery() {
         final Specification<DriverDO> any = any();
         final String query = "name:driver01";
         when(driverRepository.findAll(any)).thenReturn(new ArrayList<>(singletonList(t_driverDO1)));
         final List<DriverDO> result = driverService.searchUnselected(query);
         assertThat(t_driverDO1, isIn(result));
         assertThat(t_driverDO2, not(isIn(result)));
-        assertTrue(result.stream().allMatch(item->item.getUsername().contains("driver01")));
+        assertTrue(result.stream().allMatch(item -> item.getUsername().contains("driver01")));
     }
 }

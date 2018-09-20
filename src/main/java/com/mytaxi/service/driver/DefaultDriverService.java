@@ -8,7 +8,6 @@ import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.DriverNotFoundException;
-import com.mytaxi.exception.EntityNotFoundException;
 import com.mytaxi.specification.DriverCarSpecificationBuilder;
 import com.mytaxi.specification.DriverSpecificationBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Service to encapsulate the link between DAO and controller and to have business logic for some driver specific things.
+ * <p>
+ * Service to encapsulate the link between DAO and controller and to have business logic and search for some driver specific things.
  * <p/>
  */
 @Service
@@ -44,7 +44,7 @@ public class DefaultDriverService implements DriverService {
      *
      * @param driverId
      * @return found driver
-     * @throws EntityNotFoundException if no driver with the given id was found.
+     * @throws DriverNotFoundException if no driver with the given id was found.
      */
     @Override
     public DriverDO find(Long driverId) throws DriverNotFoundException {
@@ -56,7 +56,7 @@ public class DefaultDriverService implements DriverService {
      * Creates a new driver.
      *
      * @param driverDO
-     * @return
+     * @return created driver
      * @throws ConstraintsViolationException if a driver already exists with the given username, ... .
      */
     @Override
@@ -75,8 +75,9 @@ public class DefaultDriverService implements DriverService {
     /**
      * Deletes an existing driver by id.
      *
-     * @param driverId
-     * @throws EntityNotFoundException if no driver with the given id was found.
+     * @param driverId long
+     * @return deleted driver
+     * @throws DriverNotFoundException if no driver with the given id was found.
      */
     @Override
     @Transactional
@@ -91,10 +92,11 @@ public class DefaultDriverService implements DriverService {
     /**
      * Update the location for a driver.
      *
-     * @param driverId
-     * @param longitude
-     * @param latitude
-     * @throws EntityNotFoundException
+     * @param driverId  long
+     * @param longitude double
+     * @param latitude  double
+     * @return updated driver
+     * @throws DriverNotFoundException Exception
      */
     @Override
     @Transactional
@@ -109,7 +111,8 @@ public class DefaultDriverService implements DriverService {
     /**
      * Find all drivers by online state.
      *
-     * @param onlineStatus
+     * @param onlineStatus OnlineStatus
+     * @return list of drivers
      */
     @Override
     public List<DriverDO> find(OnlineStatus onlineStatus) {
@@ -117,6 +120,10 @@ public class DefaultDriverService implements DriverService {
         return driverRepository.findByOnlineStatus(onlineStatus);
     }
 
+    /**
+     * @param query String
+     * @return List of matching Drivers
+     */
     @Override
     public List<DriverCarDO> searchSelected(String query) {
         log.debug("Search Selected Driver {}", query);
@@ -133,6 +140,10 @@ public class DefaultDriverService implements DriverService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param query String
+     * @return list of matching drivers
+     */
     @Override
     public List<DriverDO> searchUnselected(String query) {
         log.debug("Search Unselected Driver {}", query);

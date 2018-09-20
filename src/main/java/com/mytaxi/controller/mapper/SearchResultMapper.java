@@ -28,7 +28,8 @@ public class SearchResultMapper {
 
     public static List<SearchResultDTO> makeSearchResultDTOListFromDriverCarDO(List<DriverCarDO> driverCarDOList) {
         return driverCarDOList.stream()
-                .map(SearchResultMapper::makeSearchResultDTO).collect(Collectors.toList());
+                .map(SearchResultMapper::makeSearchResultDTO)
+                .collect(Collectors.toList());
     }
 
     public static SearchResultDTO makeSearchResultDTOFromDriverDO(DriverDO driverDO) {
@@ -40,6 +41,7 @@ public class SearchResultMapper {
 
     public static List<SearchResultDTO> makeSearchResultDTOListFromDriverDO(List<DriverDO> driverDOList) {
         return driverDOList.stream()
-                .map(SearchResultMapper::makeSearchResultDTOFromDriverDO).collect(Collectors.toList());
+                .map(SearchResultMapper::makeSearchResultDTOFromDriverDO)
+                .collect(Collectors.toList());
     }
 }

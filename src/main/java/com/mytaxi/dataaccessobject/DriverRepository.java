@@ -15,7 +15,5 @@ import java.util.List;
  */
 public interface DriverRepository extends JpaRepository<DriverDO, Long>,
         JpaSpecificationExecutor<DriverDO> {
-
     List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus);
-
 }

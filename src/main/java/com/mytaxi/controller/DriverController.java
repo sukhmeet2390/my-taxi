@@ -52,14 +52,11 @@ public class DriverController {
         driverService.delete(driverId);
     }
 
-
     @PutMapping("/{driverId}")
     public void updateLocation(@PathVariable long driverId, @RequestParam double longitude,
-                               @RequestParam double latitude)
-            throws DriverNotFoundException {
+                               @RequestParam double latitude) throws DriverNotFoundException {
         driverService.updateLocation(driverId, longitude, latitude);
     }
-
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -69,14 +66,14 @@ public class DriverController {
 
     @PutMapping("/{driverId}/select-car/{carId}")
     public DriverCarDTO selectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                           @PathVariable(name = "carId") Long carId)
-            throws DriverNotFoundException, CarNotFoundException, DriverOfflineException, CarAlreadyInUseException {
+                                           @PathVariable(name = "carId") Long carId) throws DriverNotFoundException,
+            CarNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         return DriverCarMapper.makeDriverCarDTO(driverCarService.selectCar(driverId, carId));
     }
 
     @PutMapping("/{driverId}/deselect-car/{carId}")
     public void deselectCarForDriver(@PathVariable(name = "driverId") Long driverId,
-                                     @PathVariable(name = "carId") Long carId) throws CarNotFoundException,DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
+                                     @PathVariable(name = "carId") Long carId) throws CarNotFoundException, DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         driverCarService.deselectCar(driverId, carId);
     }
 

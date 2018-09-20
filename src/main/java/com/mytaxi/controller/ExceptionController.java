@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 @Slf4j
 public class ExceptionController {
-
     @ExceptionHandler(CarAlreadyInUseException.class)
     public ResponseEntity<GenericErrorDTO> carAlreadyInUseHandler(CarAlreadyInUseException e) {
         final GenericErrorDTO err = new GenericErrorDTO(HttpStatus.CONFLICT.value(), e.getMessage());

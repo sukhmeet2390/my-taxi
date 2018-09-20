@@ -1,12 +1,17 @@
 package com.mytaxi.specification;
 
 import com.mytaxi.domainobject.DriverCarDO;
-import com.mytaxi.util.SearchCriteria;
+import com.mytaxi.domainvalue.SearchCriteria;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 
+/**
+ * <p>
+ * Specification to encapsulate the link between repository and driverCar Search.
+ * <p/>
+ */
 @Getter
 public class DriverCarSpecification implements Specification<DriverCarDO> {
     private final SearchCriteria criteria;

@@ -11,6 +11,11 @@ import com.mytaxi.service.driver.DriverService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * <p>
+ * Service to encapsulate the link between DAO and controller and to have business logic and search for some selected driver and car specific things.
+ * <p/>
+ */
 @Slf4j
 @Service
 public class DefaultDriveCarService implements DriverCarService {
@@ -26,8 +31,17 @@ public class DefaultDriveCarService implements DriverCarService {
         this.driverService = driverService;
     }
 
+    /**
+     * @param driverId long
+     * @param carId    long
+     * @return DriverCarDO
+     * @throws DriverNotFoundException  exception if driver not found
+     * @throws CarNotFoundException     exception if car not found
+     * @throws CarAlreadyInUseException exception if some other driver is using it
+     * @throws DriverOfflineException   exception is driver is offline
+     */
     @Override
-    public DriverCarDO  selectCar(Long driverId, Long carId) throws DriverNotFoundException, CarNotFoundException,
+    public DriverCarDO selectCar(Long driverId, Long carId) throws DriverNotFoundException, CarNotFoundException,
             CarAlreadyInUseException, DriverOfflineException {
         log.debug("Select Car {} / {}", driverId, carId);
         DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
@@ -49,8 +63,16 @@ public class DefaultDriveCarService implements DriverCarService {
         }
     }
 
+    /**
+     * @param driverId long
+     * @param carId    long
+     * @throws CarNotFoundException     exception if car not found
+     * @throws DriverNotFoundException  exception if driver not found
+     * @throws DriverOfflineException   exception is driver is offline
+     * @throws CarAlreadyInUseException exception if some other driver is using it
+     */
     @Override
-    public void deselectCar(Long driverId, Long carId) throws CarNotFoundException,DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
+    public void deselectCar(Long driverId, Long carId) throws CarNotFoundException, DriverNotFoundException, DriverOfflineException, CarAlreadyInUseException {
         log.debug("Deselect Car {} / {}", driverId, carId);
         final DriverCarDO alreadySelectedCar = driverCarRepository.findByCarDO_Id(carId);
         if (alreadySelectedCar == null || !alreadySelectedCar.getDriverDO().getId().equals(driverId)) {

@@ -1,13 +1,16 @@
 package com.mytaxi.specification;
 
 import com.mytaxi.domainobject.DriverCarDO;
-import com.mytaxi.util.SearchCriteria;
+import com.mytaxi.domainvalue.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * <p>
+ * Builder for encapsulating  the link between Specification and driverCar Search.
+ * <p/>
+ */
 public class DriverCarSpecificationBuilder {
     private final List<SearchCriteria> params;
 

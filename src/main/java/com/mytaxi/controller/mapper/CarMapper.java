@@ -37,7 +37,7 @@ public class CarMapper {
                 car.getRating(),
                 EngineType.valueOf(car.getEngine()),
                 car.getManufacturer(),
-                false,
+                car.getDeleted(),
                 car.getConvertible(),
                 car.getColor(),
                 car.getModel());
